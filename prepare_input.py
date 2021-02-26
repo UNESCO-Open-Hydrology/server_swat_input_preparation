@@ -132,11 +132,11 @@ os.system("gdalwarp -r {resample_type} -dstnodata {ds_nodata} -tr 300 300 -ot {d
 # process soils
 print("Please ignore ERROR 1")
 
-zipfile.ZipFile("temp/soil/DSMW.zip", 'r').extractall("temp/soil")
-os.system('ogr2ogr -f "ESRI Shapefile" -t_srs EPSG:3395 -s_srs EPSG:4326 resources/soil/DSMW_3390.shp temp/soil/DSMW.shp 2> tmp')  # reproject
+zipfile.ZipFile("resources/soil/DSMW.zip", 'r').extractall("temp/soil")
+os.system('ogr2ogr -f "ESRI Shapefile" -t_srs EPSG:3395 -s_srs EPSG:4326 resources/soil/DSMW_3395.shp temp/soil/DSMW.shp 2> tmp')  # reproject
 print("Please ignore ERROR 1")
 
-clip_features(mask_shapefile, "resources/soil/DSMW_3390.shp",
+clip_features(mask_shapefile, "resources/soil/DSMW_3395.shp",
               "temp/soil/clipped.shp")
 
 soils = geopandas.read_file("temp/soil/clipped.shp")
@@ -145,7 +145,7 @@ rst = rasterio.open("data/rasters/dem.tif")
 meta = rst.meta.copy()
 meta.update(compress='lzw')
 
-with rasterio.open("data/rasters/soils_blue_nile.tif", 'w+', **meta) as out:
+with rasterio.open("data/rasters/soils.tif", 'w+', **meta) as out:
     out_arr = out.read(1)
 
     # this is where we create a generator of geom, value pairs to use in rasterizing
